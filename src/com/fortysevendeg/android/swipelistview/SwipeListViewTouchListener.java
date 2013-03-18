@@ -280,6 +280,14 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
     }
 
     /**
+     * Remove item
+     * @param position Position of list
+     */
+    protected void removeAnimate(int position) {
+        removeAnimate(parentView, position);
+    }
+
+    /**
      * Open item
      * @param view affected view
      * @param position Position of list
@@ -298,6 +306,17 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
     private void closeAnimate(View view, int position) {
         if (opened.get(position)) {
             generateRevealAnimate(view, true, false, position);
+        }
+    }
+
+    /**
+     * Remove item
+     * @param view affected view
+     * @param position Position of list
+     */
+    private void removeAnimate(View view, int position) {
+        if (opened.get(position)) {
+            generateDismissAnimate(view, true, false, position);
         }
     }
 

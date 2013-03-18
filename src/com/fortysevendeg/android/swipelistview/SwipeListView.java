@@ -219,6 +219,15 @@ public class SwipeListView extends ListView {
     }
 
     /**
+     * Remove ListView's item
+     *
+     * @param position Position that you want open
+     */
+    public void removeAnimate(int position) {
+        touchListener.removeAnimate(position);
+    }
+
+    /**
      * Notifies onDismiss
      *
      * @param reverseSortedPositions All dismissed positions
