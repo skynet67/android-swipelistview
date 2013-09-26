@@ -118,20 +118,22 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
      */
     private void setFrontView(View frontView) {
         this.frontView = frontView;
-        frontView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                swipeListView.onClickFrontView(downPosition);
-            }
-        });
-        if (swipeOpenOnLongPress) {
-            frontView.setOnLongClickListener(new View.OnLongClickListener() {
+        if(frontView != null){
+            frontView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public boolean onLongClick(View v) {
-                    openAnimate(downPosition);
-                    return false;
+                public void onClick(View v) {
+                    swipeListView.onClickFrontView(downPosition);
                 }
             });
+            if (swipeOpenOnLongPress) {
+                frontView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        openAnimate(downPosition);
+                        return false;
+                    }
+                });
+            }
         }
     }
 
@@ -141,12 +143,15 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
      */
     private void setBackView(View backView) {
         this.backView = backView;
-        backView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                swipeListView.onClickBackView(downPosition);
-            }
-        });
+        if(backView != null){
+            backView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    swipeListView.onClickBackView(downPosition);
+                }
+            });
+        }
+
     }
 
     /**
@@ -328,11 +333,14 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
      * @param position Position of list
      */
     private void generateAnimate(final View view, final boolean swap, final boolean swapRight, final int position) {
-        if (swipeCurrentAction == SwipeListView.SWIPE_ACTION_REVEAL) {
-            generateRevealAnimate(view, swap, swapRight, position);
-        }
-        if (swipeCurrentAction == SwipeListView.SWIPE_ACTION_DISMISS) {
-            generateDismissAnimate(parentView, swap, swapRight, position);
+
+        if(view != null){
+            if (swipeCurrentAction == SwipeListView.SWIPE_ACTION_REVEAL) {
+                generateRevealAnimate(view, swap, swapRight, position);
+            }
+            if (swipeCurrentAction == SwipeListView.SWIPE_ACTION_DISMISS) {
+                generateDismissAnimate(parentView, swap, swapRight, position);
+            }
         }
     }
 
@@ -504,12 +512,14 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
                         setFrontView(child.findViewById(swipeFrontView));
                         downX = motionEvent.getRawX();
                         downPosition = swipeListView.getPositionForView(child);
-
-                        frontView.setClickable(!opened.get(downPosition));
-                        frontView.setLongClickable(!opened.get(downPosition));
+                        if(frontView != null){
+                            frontView.setClickable(!opened.get(downPosition));
+                            frontView.setLongClickable(!opened.get(downPosition));
+                        }
 
                         velocityTracker = VelocityTracker.obtain();
                         velocityTracker.addMovement(motionEvent);
+
                         if (swipeBackView > 0) {
                             setBackView(child.findViewById(swipeBackView));
                         }
@@ -559,7 +569,7 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
                 velocityTracker = null;
                 downX = 0;
                 // change clickable front view
-                if (swap) {
+                if (swap && frontView != null) {
                     frontView.setClickable(opened.get(downPosition));
                     frontView.setLongClickable(opened.get(downPosition));
                 }
@@ -651,7 +661,9 @@ public class SwipeListViewTouchListener implements View.OnTouchListener {
             setAlpha(parentView, Math.max(0f, Math.min(1f,
                     1f - 2f * Math.abs(deltaX) / viewWidth)));
         } else {
-            setTranslationX(frontView, deltaX);
+            if(frontView != null){
+                setTranslationX(frontView, deltaX);
+            }
         }
     }
 
